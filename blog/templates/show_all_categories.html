@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}
+    All Categories
+{% endblock %}
+{% block content %}
+    {% for category in categories %}
+        <p>
+            <a href="{% url "show_category" category.id %}">
+                {{ category }}
+            </a>
+            <a href="{% url "delete_category" category.id %}"
+               class="btn btn-danger">
+                Delete
+            </a>
+        </p>
+    {% endfor %}
+    <form action="{% url 'create_category' %}" method="post">
+    {% csrf_token %}
+        <input type="text" name="name">
+        <input type="submit" value="Create">
+    </form>
+{% endblock %}
