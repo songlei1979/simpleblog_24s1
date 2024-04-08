@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, UpdateView
 
 from blog.models import Category, Post
 
@@ -37,5 +38,11 @@ def create_category(request):
 class PostListView(ListView):
     model = Post
     template_name = "show_all_posts.html"
+
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ['title', 'content']
+    template_name = "update_post.html"
+    success_url = reverse_lazy('show_all_posts')
 
 
