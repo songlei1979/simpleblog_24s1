@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView
@@ -45,4 +46,35 @@ class PostUpdateView(UpdateView):
     template_name = "update_post.html"
     success_url = reverse_lazy('show_all_posts')
 
+def register_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        user = User.objects.create_user(username=username,
+                                        password=password,
+                                        first_name=first_name,
+                                        last_name=last_name,
+                                        email=email)
+        user.groups.add(1)
+        user.save()
+    return render(request, 'register_user.html')
 
+def create_user(username, password, first_name, last_name, email):
+    user = User.objects.create_user(username=username,
+                                    password=password,
+                                    first_name=first_name,
+                                    last_name=last_name,
+                                    email=email)
+    user.groups.add(1)
+    user.save()
+
+def like_dislike_post(request, id):
+    post = Post.objects.get(id=id)
+    if request.user in post.likes.all():
+        post.likes.remove(request.user)
+    else:
+        post.likes.add(request.user)
+    return redirect('show_all_posts')

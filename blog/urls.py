@@ -12,4 +12,6 @@ urlpatterns = [
     path("create_category/", views.create_category, name="create_category"),
     path("show_all_posts/", PostListView.as_view(), name="show_all_posts"),
     path("update_post/<int:pk>/", views.PostUpdateView.as_view(), name="update_post"),
+    path("register_user/", views.register_user, name="register_user"),
+    path('like_post/<int:id>/', views.like_dislike_post, name='like_post'),
 ]

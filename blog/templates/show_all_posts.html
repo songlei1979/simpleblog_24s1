@@ -8,8 +8,16 @@
             {% if user.is_authenticated %}
                 {% if user == post.author %}
                     <a href="{% url 'update_post' post.id %}">Update</a>
+                {% else %}
+                    {% if user in post.likes.all %}
+                        <a href="{% url 'like_post' post.id %}">Dislike</a>
+                    {% else %}
+                        <a href="{% url 'like_post' post.id %}">Like</a>
+                    {% endif %}
                 {% endif %}
             {% endif %}
+        <p>
+        Likes: {{ post.likes.count }}
         </p>
     {% endfor %}
 {% endblock %}
