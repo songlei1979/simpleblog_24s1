@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <p>
+    {% if post.author.profile %}
+        <a href="{% url 'show_profile' post.author.profile.id %}">
+            {{ post.author }}
+        </a>
+    {% else %}
+        {{ post.author }}
+    {% endif %}
+    </p>
+    <hr>
+    <h2>comments</h2>
+    <ul>
+        {% for comment in post.comment_set.all %}
+            <li>{{ comment.content }} - {{ comment.author }}</li>
+        {% endfor %}
+    </ul>
+    {% if user.is_authenticated %}
+        {% if user != post.author %}
+            <form action="{% url 'create_comment' post.id %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="content">
+                <input type="submit" value="Submit">
+            </form>
+        {% endif %}
+    {% endif %}
+{% endblock %}

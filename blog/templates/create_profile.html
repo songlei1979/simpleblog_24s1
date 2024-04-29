@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}
+    Create Profile
+{% endblock %}
+{% block content %}
+    <h1>Create Profile</h1>
+    {% if user.is_authenticated %}
+        {% if not user.profile %}
+            <form method="post" enctype="multipart/form-data" action="{% url 'create_profile' %}">
+                {% csrf_token %}
+                <input type="file" name="image"><br>
+                <input type="text" name="address" placeholder="address"><br>
+                <input type="text" name="phone" placeholder="phone"><br>
+                <input type="text" name="youtube" placeholder="youtube"><br>
+                <input type="submit" value="Submit">
+            </form>
+        {% endif %}
+    {% endif %}
+{% endblock %}

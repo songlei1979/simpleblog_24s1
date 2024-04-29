@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+    <h1>{{ profile.user.first_name }}</h1>
+    <p><img src="{{ profile.image.url }}" width="100px"> </p>
+    <p>Address: {{ profile.address }}</p>
+    <p>Phone: {{ profile.phone }}</p>
+    <p>Youtube: {{ profile.youtube }}</p>
+{% endblock %}

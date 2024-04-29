@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
     {% for post in object_list %}
-        <p>{{ post }}
+        <p><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a>
             {% if user.is_authenticated %}
                 {% if user == post.author %}
                     <a href="{% url 'update_post' post.id %}">Update</a>
