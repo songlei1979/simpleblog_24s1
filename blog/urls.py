@@ -19,4 +19,6 @@ urlpatterns = [
     path('create_profile/', views.create_profile, name='create_profile'),
     path('update_profile/<int:pk>/', views.ProfileUpdateView.as_view(), name='update_profile'),
     path('show_profile/<int:pk>/', views.ProfileDetailView.as_view(), name='show_profile'),
+    path('send_email_out/', views.send_email_out, name='send_email_out'),
+    path('read_excel/', views.read_excel, name='read_excel'),
 ]

@@ -1,4 +1,6 @@
+import pandas
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, UpdateView
@@ -134,5 +136,63 @@ def sum_numbers(request):
     num1 = int(request.POST['num1'])
     num2 = int(request.POST['num2'])
     result = num1 + num2
-    return render(request, 'sum_numbers.html', {'result': result}
+    return render(request, 'sum_numbers.html', {'result': result})
 
+
+def send_email_out(request):
+    if request.method == 'POST':
+        subject = request.POST['subject']
+        body = request.POST['body']
+        from_email = request.POST['from_email']
+        to_email = request.POST['to_email']
+        send_mail(subject, body, from_email, [to_email])
+    return render(request, 'send_email_out.html')
+
+
+def read_excel(request):
+    if request.method == 'POST':
+        excel_file = request.FILES['excel_file']
+        worksheet = pandas.read_excel(excel_file)
+        data = pandas.DataFrame(worksheet, columns=[
+            "Username", "DOB", "Firstname", "Lastname",
+            "email", "Address", "Phone", "Youtube"
+        ])
+        usernames = data["Username"].tolist()
+        dobs = data["DOB"].tolist()
+        firstnames = data["Firstname"].tolist()
+        lastnames = data["Lastname"].tolist()
+        emails = data["email"].tolist()
+        addresses = data["Address"].tolist()
+        phones = data["Phone"].tolist()
+        youtubes = data["Youtube"].tolist()
+        i = 0
+        while i < len(usernames):
+            dob = dobs[i]
+            dob = dob.strftime('%Y-%m-%d') #1999-12-31
+            dob = str(dob)
+            password = dob.split('-')[0]+dob.split('-')[1]+dob.split('-')[2]
+            username = usernames[i]
+            first_name = firstnames[i]
+            last_name = lastnames[i]
+            email = emails[i]
+            address = addresses[i]
+            phone = phones[i]
+            youtube = youtubes[i]
+            User.objects.create_user(username=username,
+                                      password=password,
+                                    first_name=first_name,
+                                    last_name=last_name,
+                                    email=email)
+            Profile.objects.create(user=User.objects.get(username=username),
+                                   address=address,
+                                   phone=phone,
+                                   youtube=youtube)
+            i += 1
+
+        return render(request, 'read_excel.html', {
+            'msg': 'Done'
+        })
+    else:
+        return render(request, 'read_excel.html', {
+            'msg': ''
+        })
