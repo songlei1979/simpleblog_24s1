@@ -129,3 +129,10 @@ class ProfileUpdateView(UpdateView):
 class ProfileDetailView(DetailView):
     model = Profile
     template_name = "show_profile.html"
+
+def sum_numbers(request):
+    num1 = int(request.POST['num1'])
+    num2 = int(request.POST['num2'])
+    result = num1 + num2
+    return render(request, 'sum_numbers.html', {'result': result}
+
